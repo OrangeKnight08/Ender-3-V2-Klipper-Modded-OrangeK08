@@ -18,7 +18,7 @@ O objetivo do projeto é explorar o potencial da Ender 3 V2, buscando **mais vel
 # 📸 Minha Ender 3 V2
 
 <p align="center">
-  <img src="images/ender3v2-main.jpg" alt="Ender 3 V2 Klipper Modded OrangeK08" width="700">
+  <img src="ender3v2-main.jpg" alt="Ender 3 V2 Klipper Modded OrangeK08" width="700">
 </p>
 
 <p align="center">
@@ -46,9 +46,10 @@ O objetivo do projeto é explorar o potencial da Ender 3 V2, buscando **mais vel
 | Host | PC Linux |
 | Extrusor | BMG Clone Direct Drive |
 | Hotend | TZ E3 2.0 |
+| Toolhead | Hero Me modificado |
 | Nivelamento | CR Touch |
 | Sensor de filamento | BTT SFS V2 |
-| Input Shaper | ADXL345 |
+| Acelerômetro | BTT ADXL345 V2.0 / RP2040 |
 
 ---
 
@@ -56,40 +57,39 @@ O objetivo do projeto é explorar o potencial da Ender 3 V2, buscando **mais vel
 
 Minha Ender 3 V2 possui diversas modificações mecânicas e eletrônicas:
 
-- Linear Rail MGN12H no eixo X
-- Linear Rail no eixo Y
-- Dual Z
-- Dois motores no eixo Z
-- Estabilização superior do eixo Z
-- Direct Drive
-- Extrusor BMG Clone
-- Hotend TZ E3 2.0
-- Hero Me modificado
-- CR Touch
-- BTT Smart Filament Sensor V2
-- ADXL345 para Input Shaper
-- Enclosure Creality
-- Iluminação LED interna
-- Refrigeração modificada da eletrônica
-- Dissipadores nos motores
-- Ventoinha maior para a placa-mãe
-- Ventoinha de 120 mm na fonte
-- Isolamento térmico sob a mesa
-- Reguladores metálicos da mesa
-- Superfície magnética de impressão
+- 🛤️ Linear Rail MGN12H no eixo X
+- 🛤️ Linear Rail no eixo Y
+- ⚙️ Dual Z
+- ⚙️ Dois motores no eixo Z
+- 🔩 Estabilização superior do eixo Z
+- 🔥 Direct Drive
+- ⚙️ Extrusor BMG Clone
+- 🔥 Hotend TZ E3 2.0
+- 🧩 Hero Me modificado
+- 📏 CR Touch
+- 🧵 BTT Smart Filament Sensor V2
+- 📊 BTT ADXL345 V2.0 / RP2040
+- 🏠 Enclosure Creality
+- 💡 Iluminação LED interna
+- ❄️ Refrigeração modificada da eletrônica
+- ❄️ Dissipadores nos motores
+- 🌀 Ventoinha de 60 × 20 mm na placa-mãe
+- 🌀 Ventoinha de 120 mm na fonte
+- 🌡️ Isolamento térmico sob a mesa
+- 🔩 Reguladores metálicos da mesa
+- 🧲 Superfície magnética de impressão
 
 ---
 
-# ⚙️ Movimento
-
-A máquina recebeu modificações importantes nos eixos X, Y e Z.
+# ⚙️ Sistema de movimento
 
 ## 🛤️ Eixo X
 
 - Linear Rail MGN12H
-- Toolhead montado no sistema de trilho linear
+- Toolhead montado no trilho linear
 - Hero Me
 - Direct Drive
+- BMG Clone
 
 ## 🛤️ Eixo Y
 
@@ -136,8 +136,6 @@ max_z_accel: 300
 | Y | **230 mm** |
 | Z | **250 mm** |
 
-Configuração:
-
 ```ini
 [stepper_x]
 position_max: 250
@@ -156,20 +154,26 @@ position_min: -6
 
 # 🧩 Hero Me / Toolhead
 
-A impressora utiliza um **Hero Me modificado** como conjunto do toolhead.
+A impressora utiliza um conjunto **Hero Me modificado**, adaptado ao sistema atual da máquina.
 
-O sistema integra:
+O conjunto integra:
 
 - Hero Me
 - Direct Drive
-- BMG Clone
+- Extrusor BMG Clone
 - Hotend TZ E3 2.0
 - CR Touch
 - Refrigeração do Hotend
 - Refrigeração da peça
 - Montagem no Linear Rail do eixo X
 
-O objetivo desse conjunto é melhorar a integração entre o sistema de extrusão, refrigeração, sensor de nivelamento e movimentação do eixo X.
+O conjunto foi utilizado buscando melhorar:
+
+- Rigidez do cabeçote
+- Integração do Direct Drive
+- Refrigeração
+- Posicionamento do CR Touch
+- Organização do sistema de extrusão
 
 ---
 
@@ -177,7 +181,7 @@ O objetivo desse conjunto é melhorar a integração entre o sistema de extrusã
 
 A máquina utiliza **BMG Clone em Direct Drive**.
 
-### Configuração atual
+Configuração atual:
 
 ```ini
 [extruder]
@@ -187,7 +191,7 @@ nozzle_diameter: 0.400
 filament_diameter: 1.750
 ```
 
-### Driver
+Driver:
 
 ```ini
 [tmc2209 extruder]
@@ -209,13 +213,12 @@ O Direct Drive também facilita a utilização de materiais flexíveis como TPU.
 
 # 🔥 Hotend
 
-A impressora utiliza:
+A impressora utiliza o **TZ E3 2.0**.
 
-**TZ E3 2.0**
-
-Configuração:
+### Configuração
 
 - Bico: **0.4 mm**
+- Filamento: **1.75 mm**
 - Temperatura máxima configurada: **300 °C**
 - Termistor: **EPCOS 100K B57560G104F**
 
@@ -230,8 +233,6 @@ max_temp: 300
 # 📏 CR Touch
 
 O nivelamento utiliza **CR Touch** como `z_virtual_endstop`.
-
-Configuração atual:
 
 ```ini
 [bltouch]
@@ -257,41 +258,66 @@ z_hop: 7
 z_hop_speed: 10
 ```
 
-O Z Offset deve ser calibrado individualmente para cada máquina.
+> O Z Offset deve ser calibrado individualmente para cada máquina.
 
 ---
 
 # 🛏️ Bed Mesh
 
-A configuração atualmente salva utiliza uma malha:
+A configuração atualmente salva utiliza:
 
-**5 × 5**
-
-Área:
-
+- Malha **5 × 5**
 - X: **30 → 195 mm**
 - Y: **40 → 200 mm**
-- Algoritmo: **Bicubic**
+- Algoritmo: `bicubic`
 
 Também utilizo recursos de **Adaptive Bed Mesh** através das configurações e macros da máquina.
 
 ---
 
+# 🧵 BTT Smart Filament Sensor V2
+
+A impressora utiliza o **BIGTREETECH Smart Filament Sensor V2 (SFS V2)**.
+
+O sistema monitora tanto a presença quanto o movimento real do filamento.
+
+### Sensores
+
+- Filament Switch Sensor
+- Filament Motion Sensor
+- Encoder de movimento
+
+### Recursos
+
+- Detecção de presença do filamento
+- Detecção de falta de filamento
+- Monitoramento do movimento
+- Detecção de possível travamento
+- Pausa automática
+
+A configuração fica separada em:
+
+```text
+btt-sfs-v2.cfg
+```
+
+---
+
 # 📊 ADXL345 + Input Shaper
 
-A máquina utiliza **BTT ADXL345 V2.0 / RP2040** para análise de ressonância.
+A máquina utiliza **BTT ADXL345 V2.0 com RP2040** para análise de ressonância.
 
-O acelerômetro é utilizado para:
+É utilizado para:
 
 - Medir vibrações
-- Calibrar o eixo X
-- Calibrar o eixo Y
-- Configurar Input Shaper
+- Analisar ressonâncias do eixo X
+- Analisar ressonâncias do eixo Y
+- Calibrar Input Shaper
 - Reduzir ringing
 - Reduzir ghosting
 - Otimizar velocidade e aceleração
 
-A configuração do ADXL pode ser ativada quando necessária:
+A configuração pode ser ativada quando necessária:
 
 ```ini
 #[include ADXL345.cfg]
@@ -301,7 +327,7 @@ A configuração do ADXL pode ser ativada quando necessária:
 
 # 📈 Input Shaper
 
-Configuração atual:
+Configuração atualmente utilizada:
 
 ```ini
 [input_shaper]
@@ -319,55 +345,27 @@ shaper_freq_y: 39
 
 **MZV @ 39 Hz**
 
-> Estes valores são específicos da configuração atual da minha impressora e não devem ser simplesmente copiados para outra máquina.
-
----
-
-# 🧵 BTT Smart Filament Sensor V2
-
-A impressora utiliza o **BIGTREETECH Smart Filament Sensor V2 (SFS V2)**.
-
-O sistema monitora tanto a presença quanto o movimento do filamento.
-
-### Sensores
-
-- Filament Switch Sensor
-- Filament Motion Sensor
-- Encoder de movimento
-
-### Recursos
-
-- Detecção de presença do filamento
-- Detecção de falta de filamento
-- Detecção de movimento
-- Detecção de possível travamento
-- Pausa automática da impressão
-
-A configuração fica no arquivo:
-
-```text
-btt-sfs-v2.cfg
-```
+> Estes valores pertencem à configuração específica da minha impressora. Faça sua própria calibração antes de utilizá-los.
 
 ---
 
 # 🌡️ Monitoramento de temperatura
 
-A máquina possui monitoramento de:
+A máquina monitora:
 
 - Hotend
 - Mesa aquecida
 - MCU
-- PC/Host Klipper
+- PC / Host Klipper
 
-### MCU
+## MCU
 
 ```ini
 [temperature_sensor MCU]
 sensor_type: temperature_mcu
 ```
 
-### PC
+## Host
 
 ```ini
 [temperature_sensor PC]
@@ -380,7 +378,7 @@ max_temp: 100
 
 # 🛏️ Mesa aquecida
 
-Configuração da mesa:
+A mesa utiliza:
 
 - Termistor EPCOS 100K B57560G104F
 - Controle PID
@@ -400,11 +398,11 @@ O Klipper controla:
 - Heatbreak Cooling Fan
 - Controller Fan
 
-A máquina também recebeu melhorias físicas de refrigeração:
+A máquina também possui:
 
-- Ventoinha de **60 × 20 mm** na região da placa-mãe
+- Ventoinha de **60 × 20 mm** para a região da placa-mãe
 - Dissipadores nos motores
-- Ventilação modificada da eletrônica
+- Refrigeração modificada da eletrônica
 - Ventoinha de **120 mm** na fonte
 
 ---
@@ -413,11 +411,13 @@ A máquina também recebeu melhorias físicas de refrigeração:
 
 A impressora funciona dentro de um **enclosure Creality**.
 
-O enclosure possui iluminação interna e auxilia principalmente na estabilidade térmica durante impressões com materiais que se beneficiam de um ambiente mais controlado.
+O enclosure possui iluminação interna em LED e auxilia na estabilidade térmica, principalmente durante impressões com materiais como ABS.
 
-Temperaturas internas observadas em algumas impressões ficam aproximadamente na faixa de:
+A temperatura interna observada durante algumas impressões fica aproximadamente em:
 
 **35–37 °C**
+
+dependendo das condições de impressão.
 
 ---
 
@@ -445,8 +445,8 @@ Cada material possui perfis específicos de:
 
 Ao longo do projeto são realizadas calibrações de:
 
-- PID do Hotend
-- PID da mesa
+- PID Hotend
+- PID Bed
 - Rotation Distance
 - Flow
 - Pressure Advance
@@ -461,13 +461,13 @@ Ao longo do projeto são realizadas calibrações de:
 - Velocidade
 - Aceleração
 
-As calibrações podem ser atualizadas conforme novos upgrades são instalados.
+As calibrações podem mudar conforme novos upgrades forem instalados.
 
 ---
 
 # 🤖 Klipper e automações
 
-A configuração utiliza recursos como:
+A configuração utiliza:
 
 - Klipper
 - Mainsail
@@ -483,39 +483,38 @@ A configuração utiliza recursos como:
 - Skew Correction
 - Force Move
 - Shell Commands
-- Monitoramento de temperatura
+- Monitoramento da MCU
+- Monitoramento do host
 - Som ao finalizar impressão
 - Rotinas personalizadas de início e término de impressão
 
 ---
 
-# 📂 Arquivos de configuração
+# 📂 Arquivos do projeto
 
-O projeto utiliza vários arquivos `.cfg`.
+## `printer.cfg`
 
-### `printer.cfg`
+Arquivo principal da configuração Klipper.
 
-Configuração principal da impressora.
-
-### `macro.cfg`
+## `macro.cfg`
 
 Macros personalizadas.
 
-### `btt-sfs-v2.cfg`
+## `btt-sfs-v2.cfg`
 
-Configuração do BTT Smart Filament Sensor V2.
+Configuração do sensor inteligente de filamento.
 
-### `timelapse.cfg`
+## `timelapse.cfg`
 
 Configuração do Timelapse.
 
-### `shell_command.cfg`
+## `shell_command.cfg`
 
 Comandos Shell e automações.
 
-### `ADXL345.cfg`
+## `ADXL345.cfg`
 
-Configuração utilizada para calibração com o acelerômetro.
+Configuração utilizada durante a calibração de ressonância.
 
 ---
 
@@ -526,20 +525,15 @@ Ender-3-V2-Klipper-Modded-OrangeK08/
 │
 ├── README.md
 ├── LICENSE
-│
 ├── printer.cfg
+│
+├── ender3v2-main.jpg
+│
 ├── macro.cfg
 ├── btt-sfs-v2.cfg
 ├── timelapse.cfg
 ├── shell_command.cfg
 ├── ADXL345.cfg
-│
-├── images/
-│   ├── ender3v2-main.jpg
-│   ├── hero-me.jpg
-│   ├── linear-rail-x.jpg
-│   ├── linear-rail-y.jpg
-│   └── electronics.jpg
 │
 └── calibration/
     └── resultados de calibração
@@ -549,21 +543,23 @@ Ender-3-V2-Klipper-Modded-OrangeK08/
 
 # 📄 printer.cfg
 
-O arquivo principal pode ser encontrado em:
+A configuração principal está disponível em:
 
 [`printer.cfg`](./printer.cfg)
 
-Ele contém:
+O arquivo contém:
 
 - MCU
-- Cinemática
+- Cinemática cartesiana
 - Limites de movimento
-- Steppers X/Y/Z
+- Stepper X
+- Stepper Y
+- Stepper Z
 - TMC2209
 - Extrusor
 - Hotend
 - Mesa aquecida
-- Fans
+- Ventoinhas
 - CR Touch
 - Safe Z Home
 - Input Shaper
@@ -571,51 +567,17 @@ Ele contém:
 - Board Pins
 - Skew Correction
 
-Os outros arquivos são carregados através de `[include]`.
-
 ---
 
 # 📸 Galeria
 
-Conforme o projeto evoluir, serão adicionadas fotos detalhadas das modificações.
-
-## 🖨️ Visão geral
+## 🖨️ Ender 3 V2 Modded
 
 <p align="center">
-  <img src="images/ender3v2-main.jpg" alt="Ender 3 V2 Modded" width="600">
+  <img src="ender3v2-main.jpg" alt="Ender 3 V2 Modded OrangeK08" width="600">
 </p>
 
-## 🧩 Hero Me / Toolhead
-
-<!-- Quando adicionar a foto hero-me.jpg, remova este comentário.
-
-![Hero Me](images/hero-me.jpg)
-
--->
-
-## 🛤️ Linear Rail X
-
-<!-- Quando adicionar a foto linear-rail-x.jpg, remova este comentário.
-
-![Linear Rail X](images/linear-rail-x.jpg)
-
--->
-
-## 🛤️ Linear Rail Y
-
-<!-- Quando adicionar a foto linear-rail-y.jpg, remova este comentário.
-
-![Linear Rail Y](images/linear-rail-y.jpg)
-
--->
-
-## 🧠 Eletrônica
-
-<!-- Quando adicionar a foto electronics.jpg, remova este comentário.
-
-![Eletrônica](images/electronics.jpg)
-
--->
+Mais fotos das modificações individuais serão adicionadas conforme o projeto for atualizado.
 
 ---
 
@@ -628,13 +590,13 @@ O objetivo é continuar evoluindo a Ender 3 V2 para alcançar:
 - 🎯 Maior precisão
 - 🖨️ Melhor qualidade de impressão
 - 📉 Menos ringing e ghosting
-- 🔧 Maior confiabilidade
+- 🔧 Maior confiabilidade mecânica
 - 🌡️ Melhor controle térmico
 - 🤖 Mais automação
 - 📊 Melhor monitoramento
 - 🧵 Maior confiabilidade na alimentação do filamento
 
-Este projeto está em constante evolução.
+A máquina continuará recebendo modificações, testes e novas calibrações.
 
 ---
 
